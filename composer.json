@@ -1,0 +1,30 @@
+{
+    "name": "welogy/yii2-beutils",
+    "description": "Webapp backend utilities",
+    "keywords": ["yii2", "backend", "utilities"],
+    "type": "yii2-extension",
+    "license": "BSD-3-Clause",
+    "support": {
+    },
+    "authors": [
+        {
+            "name": "William Escudero",
+            "email": "welogy@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "yiisoft/yii2": "~2.0.13"
+    },
+    "autoload": {
+        "psr-4": {
+            "yii\\beutils\\": ""
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+}
