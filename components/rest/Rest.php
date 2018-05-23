@@ -162,6 +162,8 @@ class Rest extends Component
 
     /**
      * Accept request
+     * This method accepts the request in a passive manner
+     * No validation is performed here
      */
     private function acceptRequest(){
 
@@ -228,12 +230,15 @@ class Rest extends Component
      * Validate request
      */
     private function validateRequest(){
+            if (!$this->request->validate()){
+                $this->BAD_REQUEST(['message' => 'invalid request. missing headers or missing header values', 'data' => $this->request->getErrors()]);
+            }
     }
 
 
     /**
      * Sanity check.
-     * This method will ensure that the required componets
+     * This method will ensure that the required components
      * have been loaded within the application.
      */
     private function sanityCheck(){

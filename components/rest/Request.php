@@ -104,6 +104,10 @@ class Request extends Model
             [
                 ['username','password','signature','domain','stability','api','endpoint','method','versionMajor','versionMinor','timestamp'], 'required','message' => "'{attribute}' is required"
             ],
+            // Version major
+            [
+                ['versionMajor'],'integer', 'message' => 'API version is missing (versionMajor)'
+            ],
             // Username
             [
                 ['username'],'email','message' => 'invalid username'
