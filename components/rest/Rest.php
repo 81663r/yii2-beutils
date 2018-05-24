@@ -233,8 +233,7 @@ class Rest extends Component
     private function validateRequest(){
             if (!$this->request->validate()){
 
-                $this->BAD_REQUEST(\Yii::$app->error->action_entity_test(['hello' => 'world']));
-                exit;
+                $this->BAD_REQUEST(\Yii::$app->error->he_llo_world()->withData($this->request->getErrors())->toArray());
             }
     }
 

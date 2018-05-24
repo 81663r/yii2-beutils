@@ -40,23 +40,9 @@ class Manager
     const STATUS_DISABLED = 'disabled';
 
     /**
-     * Database handle
-     */
-    private $db = null;
-
-    /**
      * Entropy
      */
     private $falseEntropy = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+;:<>.";
-
-    /**
-     * Constructor
-     */
-    public function __construct($db){
-
-        // Set db handle
-        $this->db = \Yii::$app->{$db};
-    }
 
 
     /**
@@ -124,7 +110,7 @@ class Manager
                 C.name=:n
         ";
 
-        if (!($sharedSecret = ($this->db->createCommand($sql, [':u' => $request->username, ':s' => $request->stability, ':n' => $request->api])->queryOne()))){
+        if (!($sharedSecret = (\Yii::$app->db->createCommand($sql, [':u' => $request->username, ':s' => $request->stability, ':n' => $request->api])->queryOne()))){
             \Yii::$app->rest->UNAUTHORIZED();
         }
 
@@ -185,7 +171,7 @@ class Manager
      */
     public function createApi(string $name, string $domain, string $description){
         try{
-            if (($this->db->createCommand()->insert('api',[
+            if ((\Yii::$app->db->createCommand()->insert('api',[
                 'name' => $name,
                 'domain' => $domain,
                 'description' => $description,
@@ -215,7 +201,7 @@ class Manager
      */
     public function addApiEndpoint($apiId, $name, $description){
         try{
-            if (($this->db->createCommand()->insert('api_endpoint',[
+            if ((\Yii::$app->db->createCommand()->insert('api_endpoint',[
                 'api_id' => $apiId,
                 'name' => $name,
                 'description' => $description,
@@ -244,7 +230,7 @@ class Manager
      */
     public function createApiUser($domain, $username, $password){
         try{
-            if (($this->db->createCommand()->insert('api_user',[
+            if ((\Yii::$app->db->createCommand()->insert('api_user',[
                     'domain' => $domain,
                     'username' => $username,
                     'password' => hash(self::HASH_ALGO, $password),
@@ -278,7 +264,7 @@ class Manager
         $apiSharedSecret = $this->createApiSharedSecret($userId, $apiId, $stability);
 
         try{
-            if (($this->db->createCommand()->insert('api_key', [
+            if ((\Yii::$app->db->createCommand()->insert('api_key', [
                 'api_id' => $apiId,
                 'api_user_id' => $userId,
                 'passkey' => $apiSharedSecret,

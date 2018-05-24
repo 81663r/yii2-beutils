@@ -3,6 +3,7 @@ namespace yii\beutils\components\error;
 
 use yii\base\Component;
 use yii\base\Model;
+use yii\db\Query;
 
 class Error extends Component
 {
@@ -11,15 +12,11 @@ class Error extends Component
 	 */
 	const DEF_DELIMITER = '_';
 
-	/**
-	 * Language country delimiter
-	 */
-	const LANG_DELIMITER = '-';
-
-	/**
-	 * This property contains a list of errors
-	 */
-	public $errors;
+    /**
+     * Database handle
+     * Where 'error' table exists
+     */
+    public $db = null;
 
 	/**
 	 * Error id
@@ -55,8 +52,13 @@ class Error extends Component
 	 * Previous error object
 	 */
 	private $previous = null;
-	
-	
+
+    /**
+     * Error data
+     */
+    private $data = null;
+
+
 	/**
 	 * This method allows for dynamic error function calling
 	 * using action, entity and object
@@ -66,25 +68,24 @@ class Error extends Component
 	 */
 	public function __call($name, $arguments){
 
+	    $query = new Query();
+
 		// Parse function into sections
 		list($action, $entity, $object) = explode(self::DEF_DELIMITER, $name);
 
-		// Get langguage
-		list($language, $country) = explode(self::LANG_DELIMITER, \Yii::$app->language);
-		
-		// Iterate to search over errors
-		foreach($this->errors as $index => $error){
-			
-			if (($error['action'] == $action) && ($error['entity'] == $entity) && ($error['object'] == $object)){
-				
-				$this->id = $error['id'];
-				$this->action = $error['action'];
-				$this->entity = $error['entity'];
-				$this->object = $error['object'];
-				$this->systemMessage = $error['message'][$language]['system'];
-				$this->userMessage = $error['message'][$language]['user'];
-			}
-		}
+		// Get error from db
+        $query->select('*')
+            ->from('error')
+            ->where('action=:a AND entity=:e AND object=:o',[':a' => $action, ':e' => $entity, ':o' => $object]);
+
+        $error = $query->createCommand()->queryOne();
+
+        $this->id = $error == false ? -1 : $error['id'];
+        $this->action = $error == false ? "unknown" : $error['action'];
+        $this->entity = $error == false ? "unknown" : $error['entity'];
+        $this->object = $error == false ? "unknown" : $error['object'];
+        $this->systemMessage = $error == false ? "not available" : $error['system_message'];
+        $this->userMessage = $error == false ? "not available" : $error['user_message'];
 
 		// Replace tokens with token value in the messages
 		// This is an expensive operation
@@ -103,6 +104,30 @@ class Error extends Component
 
 		return $this;
 	}
+
+    /**
+     * Return error as array
+     */
+    public function toArray(){
+        return [
+            'id' => $this->getId(),
+            'action' => $this->getAction(),
+            'entity' => $this->getEntity(),
+            'object' => $this->getObject(),
+            'user_message' => $this->getUserMessage(),
+            'system_message' => $this->getSystemMessage(),
+            'data' => $this->getData()
+        ];
+    }
+
+
+    /**
+     * Add data if available
+     */
+    public function withData(array $data){
+        $this->data = $data;
+        return $this;
+    }
 
 
 	/**
@@ -161,4 +186,11 @@ class Error extends Component
 	public function getPrevious(){
 		return $this->previous;
 	}
+
+	/**
+     * Data getter
+     */
+	public function getData(){
+	    return $this->data;
+    }
 }
