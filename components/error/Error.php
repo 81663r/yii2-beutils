@@ -65,7 +65,7 @@ class Error extends Component
 	 *	action_entity_object
 	 */
 	public function __call($name, $arguments){
-		
+
 		// Parse function into sections
 		list($action, $entity, $object) = explode(self::DEF_DELIMITER, $name);
 
@@ -110,10 +110,8 @@ class Error extends Component
 	 */
 	public function raise(){
 		
-		// Create error exception object
 		throw new BackendException($this);
 	}
-
 
 	/**
 	 * id getter

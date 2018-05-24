@@ -10,6 +10,7 @@ namespace yii\beutils\components\rest;
 use yii\base\Component;
 use yii\web\HttpException;
 
+
 /**
  * Class Rest
  * @package yii\beutils\components\rest
@@ -231,7 +232,9 @@ class Rest extends Component
      */
     private function validateRequest(){
             if (!$this->request->validate()){
-                $this->BAD_REQUEST(['message' => 'invalid request. missing headers or missing header values', 'data' => $this->request->getErrors()]);
+
+                $this->BAD_REQUEST(\Yii::$app->error->action_entity_test(['hello' => 'world']));
+                exit;
             }
     }
 
