@@ -122,7 +122,7 @@ class Error extends Component
 
 
     /**
-     * Add data if available
+     * Add error data if available
      */
     public function withData(array $data){
         $this->data = $data;
