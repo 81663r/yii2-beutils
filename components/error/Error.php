@@ -70,8 +70,6 @@ class Error extends Component
 
 	    $query = new Query();
 
-
-
 		// Parse function into sections
 		list($action, $entity, $object) = explode(self::DEF_DELIMITER, $name);
 

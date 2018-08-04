@@ -252,7 +252,7 @@ class Rest extends Component
 
         // Make sure there are formatters set
         if (empty(\Yii::$app->response->formatters)){
-            $this->SERVICE_UNAVAILABLE(['message' => 'no formatters were configure']);
+            $this->SERVICE_UNAVAILABLE(['message' => 'no formatters were configured']);
         }
     }
 }

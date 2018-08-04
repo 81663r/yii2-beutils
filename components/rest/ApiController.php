@@ -22,7 +22,7 @@ abstract class ApiController extends Controller
     protected $endpoint = null;
 
     /**
-     * Get endpoints namespace
+     * Get endpoint namespace
      */
     abstract protected function getEndpointNamespace();
 
@@ -31,16 +31,12 @@ abstract class ApiController extends Controller
 	 */
 	final public function beforeAction($action){
 
-        // Get api request
         $this->request = \Yii::$app->rest->getRequest();
 
-        // Resolve endpoint
         $this->resolveEndpoint($action);
 
-        // Authenticate request
         \Yii::$app->rest->authenticateApiRequest();
 
-        // Authorize request
         \Yii::$app->rest->authorizeApiRequest();
 
 	    return parent::beforeAction($action);
@@ -56,13 +52,14 @@ abstract class ApiController extends Controller
      *
      * Where Acme conforms to the name of the action in the controller
      * that extends ApiController class
+     *
      */
 	private function resolveEndpoint($action){
 
         // Get path
         $path = $this->getEndpointNamespace();
 
-        // Build class
+        // Build class name and attempt to create endpoint object
         $class = $path."\\Endpoint".ucfirst($action->id)."V".$this->request->versionMajor."_".$this->request->versionMinor;
         try{
 
