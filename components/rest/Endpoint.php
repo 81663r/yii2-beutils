@@ -23,11 +23,9 @@ abstract class Endpoint
 
     abstract protected function delete();
 
-    final public function consume()
-    {
-        // Determine what method to call
-        switch(($this->request->method))
-        {
+    final public function consume(){
+
+        switch(($this->request->method)) {
             case 'GET':
                 return ($this->get());
             case 'POST':

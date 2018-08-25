@@ -15,7 +15,6 @@ abstract class Model extends BaseModel
 
         // Iterate over errors
         foreach($this->getErrors() as $index => $error){
-
         }
 
     }

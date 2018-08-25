@@ -56,7 +56,6 @@ class Request extends Model
      */
     public $rawData = null;
 
-
     /**
      * API request method
      */
@@ -102,16 +101,20 @@ class Request extends Model
     {
         return [
             [
-                ['username','password','signature','domain','stability','api','endpoint','method','versionMajor','versionMinor','timestamp'], 'required','message' => "'{attribute}' is required"
+                ['username','password'], 'required','message' => '{attribute} is required for basic HTTP authentication'
             ],
-            // Version major
             [
-                ['versionMajor'],'integer', 'message' => 'API version is missing (versionMajor)'
+                ['domain'], 'required', 'message' => 'Auth-Api-Domain http header is required'
             ],
-            // Username
             [
-                ['username'],'email','message' => 'invalid username'
+                ['signature'], 'required', 'message' => 'Auth-Api-Signature http header is required'
             ],
+            [
+                ['stability','versionMajor','versionMinor','timestamp'],'required','message'=>'Accept header is invalid {attribute} is required'
+            ],
+            [
+                ['api','endpoint','method'],'required','message' => "{attribute} is required"
+            ]
         ];
     }
 

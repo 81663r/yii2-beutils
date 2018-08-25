@@ -18,7 +18,7 @@ use yii\web\HttpException;
 class Rest extends Component
 {
     /**
-     * Api auth signature custom header
+     * Api custom header for
      */
     const HEADER_AUTH_API_SIGNATURE= 'Auth-Api-Signature';
 
@@ -56,7 +56,7 @@ class Rest extends Component
 	/**
      * Error codes
      */
-	private $errorCodes = [
+	static public $error_codes = [
 	    'BAD_REQUEST' => 400,
         'FORBIDDEN' => 403,
         'NOT_FOUND' => 404,
@@ -75,15 +75,6 @@ class Rest extends Component
         'CONFLICT' => 409,
         'METHOD_NOT_ALLOWED' => 405
     ];
-
-    /**
-     * Error structure
-     */
-    private $error = [
-        'error_code' => null,
-        'error' => null,
-    ];
-
 
     public function init(){
 
@@ -113,22 +104,25 @@ class Rest extends Component
         // Function name
         $fname = strtoupper($name);
 
-        if (array_key_exists($fname, $this->errorCodes)){
+        if (array_key_exists($fname, Rest::$error_codes)) {
 
-            \Yii::$app->response->{'on beforeSend'} = function($event) use ($fname, $arguments) {
+            \Yii::$app->response->{'on beforeSend'} = function ($event) use ($fname, $arguments) {
 
-                // Set error structure
-                $this->error['error_code'] = $this->errorCodes[$fname];
+                // Create error model
+                $error_model = new Error();
 
-                if (isset($arguments[0]) && is_array($arguments[0])){
+                // Set error model
+                $error_model->err_msg= is_string($arguments[0]) ? $arguments[0] : "unexpected error";
+                $error_model->err_code = is_int($argumnets[1]) ? $arguments[1] : -1;
+                $error_model->err_data = isset($arguments[2]) && is_array($arguments[2]) ? $arguments[2] : null;
+                $error_model->http_code = Rest::$error_codes[$fname];
+                $error_model->prev = isset($arguments[3]) && $arguments[3] instanceof Error ? $arguments[3] : null;
 
-                    $this->error['error'] = $arguments[0];
-
-                    $event->sender->data = $this->error;
-                }
+                // Set reply model
+                $event->sender->data = $error_model;
             };
 
-            throw new HttpException($this->errorCodes[$fname]);
+            throw new HttpException(Rest::$error_codes[$fname]);
         }
     }
 
@@ -232,8 +226,7 @@ class Rest extends Component
      */
     private function validateRequest(){
             if (!$this->request->validate()){
-
-                $this->BAD_REQUEST(\Yii::$app->error->he_llo_world()->withData($this->request->getErrors())->toArray());
+                $this->BAD_REQUEST('unable to validate request', Rest::$error_codes['BAD_REQUEST'], $this->request->getErrors());
             }
     }
 
@@ -247,12 +240,12 @@ class Rest extends Component
 
         // Make sure there are parsers set
         if (empty(\Yii::$app->request->parsers)){
-            $this->SERVICE_UNAVAILABLE(['message' => 'no parsers were configured']);
+            $this->SERVICE_UNAVAILABLE('there are no request parsers configured. check config file');
         }
 
         // Make sure there are formatters set
         if (empty(\Yii::$app->response->formatters)){
-            $this->SERVICE_UNAVAILABLE(['message' => 'no formatters were configured']);
+            $this->SERVICE_UNAVAILABLE('there are no response formats configure. check config file');
         }
     }
 }

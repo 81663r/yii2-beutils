@@ -68,7 +68,7 @@ class Manager
             ->where('domain=:d AND username=:u AND password=:p',[':d' => $domain, ':u' => $username, ':p' => $hashedPassword]);
 
         if (!($query->createCommand())->queryOne())
-            \Yii::$app->rest->UNAUTHORIZED();
+            \Yii::$app->rest->UNAUTHORIZED('unable to authenticate api request. incorrect username or password.');
 
         return true;
     }
@@ -92,7 +92,7 @@ class Manager
 
         // Make sure request is within timeout window
         if (($diff > Rest::REQUEST_VALID_TIMEOUT) || ($diff < 0))
-            \Yii::$app->rest->UNAUTHORIZED();
+            \Yii::$app->rest->UNAUTHORIZED('unable to authorize api request. request has expired.');
 
         // Get shared key from db
         $sql = "
@@ -111,7 +111,7 @@ class Manager
         ";
 
         if (!($sharedSecret = (\Yii::$app->db->createCommand($sql, [':u' => $request->username, ':s' => $request->stability, ':n' => $request->api])->queryOne()))){
-            \Yii::$app->rest->UNAUTHORIZED();
+            \Yii::$app->rest->UNAUTHORIZED('unable to authorize api request. api user not found.');
         }
 
         // Generate signature with shared secret
@@ -119,7 +119,7 @@ class Manager
 
         // Compare signatures
         if (!($signature == $request->signature)){
-            \Yii::$app->rest->UNAUTHORIZED();
+            \Yii::$app->rest->UNAUTHORIZED('unable to authorize api request. signatures do not match.');
         }
     }
 

@@ -67,7 +67,7 @@ abstract class ApiController extends Controller
             $this->endpoint = new $class();
         }
         catch(\Exception $e){
-            \Yii::$app->rest->NOT_FOUND(['message' => 'endpoint not found']);
+            \Yii::$app->rest->NOT_FOUND('unable to find endpoint -> '.$e->getMessage());
         }
 
         // Set endpoint's request body data
