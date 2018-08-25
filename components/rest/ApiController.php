@@ -9,20 +9,28 @@ namespace yii\beutils\components\rest;
 
 use yii\base\Controller;
 
+/**
+ * This class handles API controller functionality.
+ *
+ * This class abstracts all functionality required for API controllers.
+ * All controllers that conform an API must extend this class.
+ *
+ * @package yii\beutils\components\rest
+ */
 abstract class ApiController extends Controller
 {
     /**
-     * Api request
+     * The API request object for easier access.
      */
     private $request = null;
 
     /**
-     * Endpoint object
+     * The API endpoint object.
      */
     protected $endpoint = null;
 
     /**
-     * Get endpoint namespace
+     * This method resolves where the endpoints reside.
      */
     abstract protected function getEndpointNamespace();
 
@@ -44,12 +52,10 @@ abstract class ApiController extends Controller
 
 
 	/**
-     * Resolve endpoint.
-     * This method will look in the endpoint namespace
-     * for a class with the following format;
-     * Endpoint<Controller Action>V<version>.php
-     * i.e EndpointAcmeV1_0.php
+     * Resolve endpoint object.
      *
+     * This method will look in the endpoint namespace for a class with the following format;
+     * Endpoint<Controller Action>V<version>.php (i.e EndpointAcmeV1_0.php)
      * Where Acme conforms to the name of the action in the controller
      * that extends ApiController class
      *

@@ -9,20 +9,25 @@ namespace yii\beutils\components\rest;
 
 use yii\base\Model;
 
+/**
+ * This model handles the API request.
+ *
+ * @package yii\beutils\components\rest
+ */
 class Request extends Model
 {
     /**
-     * API username
+     * Basic HTTP authentication username
      */
     public $username = null;
 
     /**
-     * API password
+     * Basic HTTP authentication password
      */
     public $password = null;
 
     /**
-     * API request signature
+     * Request signature
      */
     public $signature = null;
 
@@ -32,7 +37,7 @@ class Request extends Model
     public $domain = null;
 
     /**
-     * API stability
+     * Stability (dev | prod | test)
      */
     public $stability = null;
 
@@ -57,7 +62,7 @@ class Request extends Model
     public $rawData = null;
 
     /**
-     * API request method
+     * API request method (GET | POST | PUT | DELETE)
      */
     public $method = null;
 
@@ -117,5 +122,4 @@ class Request extends Model
             ]
         ];
     }
-
 }

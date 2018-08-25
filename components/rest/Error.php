@@ -10,6 +10,11 @@ namespace yii\beutils\components\rest;
 
 use yii\base\Model;
 
+/**
+ * This models is for API error handling.
+ *
+ * @package yii\beutils\components\rest
+ */
 class Error extends Model
 {
     /**

@@ -13,8 +13,8 @@ use yii\db\Query;
 use yii\web\UnauthorizedHttpException;
 
 /**
- * Class Manager
  * This class will handle all api administrative operations.
+ *
  * @package yii\beutils\components\rest
  */
 class Manager
@@ -29,18 +29,12 @@ class Manager
      */
     const HASH_ALGO = 'sha256';
 
-    /**
-     * Status enabled
-     */
     const STATUS_ENABLED = 'enabled';
 
-    /**
-     * Status 'disabled'
-     */
     const STATUS_DISABLED = 'disabled';
 
     /**
-     * Entropy
+     * False entropy used to generate random string. This is not required to be very secure.
      */
     private $falseEntropy = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+;:<>.";
 
@@ -184,10 +178,14 @@ class Manager
             }
         }
         catch(IntegrityException $e){
-            print_r($e);
+            // @TODO: Log exception
+
+            throw $e;
         }
         catch(DbException $e){
-            print_r($e);
+            // @TODO: Log exception
+
+            throw $e;
         }
     }
 
@@ -213,10 +211,14 @@ class Manager
             }
         }
         catch(IntegrityException $e){
-            print_r($e);
+            // @TODO: Log exception
+
+            throw $e;
         }
         catch(DbException $e){
-            print_r($e);
+            // @TODO: Log exception
+
+            throw $e;
         }
     }
 
@@ -243,10 +245,14 @@ class Manager
             }
         }
         catch(IntegrityException $e){
-            print_r($e);
+            // @TODO: Log exception
+
+            throw $e;
         }
         catch(DbException $e){
-            print_r($e);
+            // @TODO: Log exception
+
+            throw $e;
         }
     }
 
@@ -278,10 +284,14 @@ class Manager
             }
         }
         catch(IntegrityException $e){
-            print_r($e);
+            // @TODO: Log exception
+
+            throw $e;
         }
         catch(DbException $e){
-            print_r($e);
+            // @TODO: Log exception
+
+            throw $e;
         }
 
         return $apiSharedSecret;

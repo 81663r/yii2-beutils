@@ -12,18 +12,22 @@ use yii\web\HttpException;
 
 
 /**
- * Class Rest
+ * This class handles all REST capabilities.
+ *
+ * This class exposes all functionality that is availble to the
+ * end user through the REST component.
+ *
  * @package yii\beutils\components\rest
  */
 class Rest extends Component
 {
     /**
-     * Api custom header for
+     * HTTP custom header for API request signature
      */
     const HEADER_AUTH_API_SIGNATURE= 'Auth-Api-Signature';
 
     /**
-     * Api domain http header
+     * HTTP custom header for API request domain
      */
     const HEADER_AUTH_API_DOMAIN = 'Auth-Api-Domain';
 
@@ -38,8 +42,7 @@ class Rest extends Component
     const REQUEST_VALID_TIMEOUT = 84000;
 
 	/**
-	 * Database connection handle
-	 * where API tables exist
+	 * Database connection handle for API tables
 	 */
 	public $db;
 
@@ -54,7 +57,7 @@ class Rest extends Component
     private $request = null;
 
 	/**
-     * Error codes
+     * HTTP error codes
      */
 	static public $error_codes = [
 	    'BAD_REQUEST' => 400,
@@ -76,34 +79,45 @@ class Rest extends Component
         'METHOD_NOT_ALLOWED' => 405
     ];
 
+
+    /**
+     * Initializes REST component.
+     *
+     * This method performs a sanity check, creates
+     * required request objects and accepts and validates the request.
+     */
     public function init(){
 
-        // Run sanity check
         $this->sanityCheck();
 
-        // Set manager object
         $this->manager = new Manager($this->db);
 
-        // Set request object
         $this->request = new Request();
 
-        // Accept http request
         $this->acceptRequest();
 
-        // Validate http request
         $this->validateRequest();
     }
 
 
-
     /**
-     * Dynamic rest methods
+     * Magic method used to handle dynamic error methods.
+     *
+     * This method uses $name to look into $error_codes to see if an HTTP error code
+     * is being called. If so it will inject a reply error and throw an exception pertaining
+     * to said http error.
+     *
+     * @param string $name Called method name
+     * @param array $arguments Called method passed arguments
+     * @return mixed|void
+     * @throws HttpException
      */
     public function __call($name, $arguments){
 
         // Function name
         $fname = strtoupper($name);
 
+        // If we find that $fname is any of $error_codes then inject an error reply and throw an exception
         if (array_key_exists($fname, Rest::$error_codes)) {
 
             \Yii::$app->response->{'on beforeSend'} = function ($event) use ($fname, $arguments) {
@@ -128,7 +142,7 @@ class Rest extends Component
 
 
     /**
-     * Authenticate api request
+     * Wrapper method that calls api authentication method from manager object
      */
     public function authenticateApiRequest(){
         $this->manager->authenticateApiRequest($this->request->domain, $this->request->username, $this->request->password);
@@ -136,29 +150,33 @@ class Rest extends Component
 
 
     /**
-     * Authorize api request
+     * Wrapper method that calls api authorization method from manager object
      */
     public function authorizeApiRequest(){
         $this->manager->authorizeApiRequest($this->request);
     }
 
+
     /**
-     * Get accepted http request
+     * Getter method to API request.
+     *
+     * @return object API request fields
      */
     public function getRequest(){
 
-        // Set scenario for request model
         $this->request->scenario = self::REQUEST_SCENARIO_PUBLIC;
 
-        // Return data
+        // Return API request fields as an object
         return ((Object)$this->request->toArray());
     }
 
 
     /**
-     * Accept request
-     * This method accepts the request in a passive manner
-     * No validation is performed here
+     * Accept API request.
+     *
+     * This method accepts the request in a passive manner. No validation is performed.
+     * The method will get basic auth credentials if available, headers and do some processing
+     * on the 'Accept' header field to obtain required API entities.
      */
     private function acceptRequest(){
 
@@ -222,7 +240,7 @@ class Rest extends Component
 
 
     /**
-     * Validate request
+     * This method validates API request.
      */
     private function validateRequest(){
             if (!$this->request->validate()){
@@ -232,9 +250,7 @@ class Rest extends Component
 
 
     /**
-     * Sanity check.
-     * This method will ensure that the required components
-     * have been loaded within the application.
+     * This method will ensure that the required components have been loaded within the application.
      */
     private function sanityCheck(){
 
