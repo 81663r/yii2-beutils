@@ -86,6 +86,8 @@ class Vtc extends Component
      * @param $binaryString The binary string that will be truncated
      * @param $length The length of the truncation
      * @return bool|string
+     *
+     * Based off https://tools.ietf.org/html/draft-mraihi-oath-hmac-otp-04#appendix-D
      */
     private function hotpDynamicTruncation($binaryString, $length){
 
