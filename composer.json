@@ -9,10 +9,10 @@
     "authors": [
         {
             "name": "William Escudero",
-            "email": "wescu001@fiu.com"
+            "email": "wescu001@fiu.edu"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "yiisoft/yii2": "~2.0.13"
     },
