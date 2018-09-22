@@ -1,0 +1,10 @@
+<tr>
+    <th>ID</th>
+    <th>Domain:</th>
+    <th>Username:</th>
+</tr>
+<tr>
+    <td><?=$model['id'];?>
+    <td><?=$model['domain'];?></td>
+    <td><?=$model['username'];?></td>
+</tr>
