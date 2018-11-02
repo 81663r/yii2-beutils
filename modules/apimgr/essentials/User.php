@@ -2,6 +2,7 @@
 namespace yii\beutils\modules\apimgr\essentials;
 
 use yii\beutils\components\rest\Manager;
+use yii\base\Model;
 
 class User{
 
@@ -15,19 +16,19 @@ class User{
      */
     private $umodel = null;
 
-    public function __construct(\UserModel $umodel){
+    public function __construct(){
 
         // Create manager object
         $this->manager = new Manager();
-
-        // Set user model object
-        $this->umodel = $umodel;
     }
 
 
     /**
      * Create new api user
+     * Assumes user model has been validated
      */
-    public function newUser(){
+    public function newUser(Model $umodel ){
+        // Create database model
+        
     }
 }

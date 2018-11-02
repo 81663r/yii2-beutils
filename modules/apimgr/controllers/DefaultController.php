@@ -1,9 +1,9 @@
 <?php
-
 namespace yii\beutils\modules\apimgr\controllers;
 
 use yii\web\Controller;
-use yii\beutils\modules\apimgr\essentials\UserModel;
+use yii\beutils\modules\apimgr\essentials\User;
+use yii\beutils\modules\apimgr\models\UserModel;
 
 /**
  * Default controller for the `apimgr` module
@@ -16,30 +16,19 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-        // Create user model
-        $umodel = new UserModel();
-
-        // Controller module
-        $module = \Yii::$app->controller->module;
 
         if (\Yii::$app->request->isGet)
             return $this->render('index');
         else{
-
-            // Populate user model
-            $umodel->attributes = $_POST['UserModel'];
-
-
         }
     }
 
-    public function actionTestone(){
-        echo "<b>HELLO FROM MODULE</b>";
-    }
+    public function actionNewuser(){
+        
+        // Create user object
+        $user = new User();
 
-
-    public function actionAdduser(){
-
-
+        // Get post request
+        print_r(\Yii::$app->request->post());
     }
 }

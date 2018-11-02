@@ -5,7 +5,7 @@ use yii\data\ActiveDataProvider;
 use yii\db\Query;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\beutils\modules\apimgr\essentials\UserModel;
+use yii\beutils\modules\apimgr\models\UserModel;
 
 
 $query = (new Query())->select("*")->from('api_user');
@@ -82,7 +82,7 @@ $umodel = new UserModel();
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
-                    <?php $form = ActiveForm::begin(); ?>
+                    <?php $form = ActiveForm::begin(['action'=>['newuser']]); ?>
                         <div class="form-group">
                             <?= $form->field($umodel, 'email') ?>
                         </div>

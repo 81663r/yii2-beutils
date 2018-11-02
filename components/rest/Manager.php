@@ -72,8 +72,8 @@ class Manager
      * Authorize api request.
      *
      * This method will authorize the api request by fetching
-     * the api secret key assigned to the user and hasing the body
-     * of the request.
+     * the api secret key assigned to the user and hashing the body
+     * of the request with said key.
      *
      * @param $request The api request
      *
