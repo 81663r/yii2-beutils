@@ -9,7 +9,6 @@ namespace yii\beutils\services;
 
 
 /**
- * <todo>
  *
  * 
  * 
@@ -18,30 +17,24 @@ namespace yii\beutils\services;
  */
 abstract class Service extends Configuration
 {
-	
 	abstract public function apply();
 
 	final public function run(){
 		return $this->apply();
 	}
 
-
 	final public function input(){
 	}
-
 
 	final public function output(){
 	}
 
-
 	private function resolveInput(){
 	}
-
 
 	private function resolveOutput(){
 	}
 	
 	private function build($provider, $type, $branch){
 	}
-
 }
