@@ -7,6 +7,7 @@
  */
 namespace yii\beutils\services;
 
+use yii\base\Model;
 
 /**
  * <todo>
@@ -16,6 +17,6 @@ namespace yii\beutils\services;
  *
  * @package yii\beutils\services
  */
-abstract class Output
+abstract class Output extends Model
 {
 }

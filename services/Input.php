@@ -7,6 +7,8 @@
  */
 namespace yii\beutils\services;
 
+use yii\base\Model;
+
 
 /**
  * <todo>
@@ -16,6 +18,8 @@ namespace yii\beutils\services;
  *
  * @package yii\beutils\services
  */
-abstract class Input 
+abstract class Input extends Model 
 {
+    final protected function snapshot(){
+    }
 }
